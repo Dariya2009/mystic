@@ -1,149 +1,127 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px # Библиотека для графиков
+import plotly.express as px
 
-# Конфигурация страницы
-st.set_page_config(page_title="Corporate Finance Suite", layout="wide", page_icon="💎")
+# Настройки страницы
+st.set_page_config(page_title="Financial Analytics Terminal", layout="centered", page_icon="📈")
 
-# Навороченный CSS для стиля "Бизнес-портал"
+# Профессиональный дизайн (Строгий розовый + Стекло)
 st.markdown("""
     <style>
-    /* Фоновый градиент и шрифт */
-    .stApp {
-        background: linear-gradient(135deg, #fdf2f5 0%, #e3f2fd 100%);
-        font-family: 'Inter', sans-serif;
+    .stApp { background: linear-gradient(135deg, #fdf2f5 0%, #f7f9fc 100%); }
+    .main-block {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        margin-bottom: 20px;
     }
-    
-    /* Стеклянный эффект для блоков */
-    .css-1r6slb0, .css-12oz5g7 {
-        background: rgba(255, 255, 255, 0.6);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        padding: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-    }
-
-    /* Профессиональные кнопки */
     .stButton>button {
-        width: 100%; border-radius: 10px; background-color: #d16a8c; color: white;
-        height: 55px; font-weight: 700; border: none; transition: 0.3s;
-        box-shadow: 0 4px 6px rgba(209, 106, 140, 0.2); letter-spacing: 1px;
+        width: 100%; border-radius: 8px; background-color: #d16a8c; color: white;
+        height: 50px; font-weight: 700; border: none; transition: 0.3s;
     }
-    .stButton>button:hover { background-color: #b55474; transform: translateY(-3px); }
-
-    /* Заголовки */
-    h1 { color: #4a3b3e; text-align: center; font-weight: 800; letter-spacing: -2px; margin-bottom: 0px; }
-    h2 { color: #635155; font-weight: 700; margin-top: 30px; }
-
-    /* Карточки знаний */
-    .theory-card {
-        background-color: rgba(255, 255, 255, 0.9); padding: 25px; border-radius: 20px;
-        border: 1px solid #f0e0e5; text-align: center; transition: 0.3s; height: 100%;
-    }
-    .theory-card:hover { transform: scale(1.03); box-shadow: 0 10px 20px rgba(209, 106, 140, 0.1); }
-    .card-icon { font-size: 40px; margin-bottom: 15px; }
-    .card-title { color: #d16a8c; font-weight: 700; font-size: 1.2em; margin-bottom: 10px; }
+    .stButton>button:hover { background-color: #b55474; transform: translateY(-2px); }
+    h1 { color: #4a3b3e; text-align: center; font-weight: 800; }
     </style>
 """, unsafe_allow_html=True)
 
-# ГЛАВНЫЙ ЗАГОЛОВОК И ДЕКОР
-col_header1, col_header2, col_header3 = st.columns([1,2,1])
-with col_header2:
-    st.markdown("<h1>Financial Analytics Pro</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #8a7a7d; font-size: 1.2em;'>Next-Generation Terminal for Financial Statement Auditing</p>", unsafe_allow_html=True)
-st.markdown("---")
+st.markdown("<h1>Financial Audit Terminal</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #8a7a7d;'>Professional Statement Verification & Data Visualization</p>", unsafe_allow_html=True)
 
-# РАБОЧАЯ ЗОНА: ДАННЫЕ И ГРАФИК
-col_data, col_visual = st.columns([1.2, 2]) # Левая колонка для ввода, правая для графика
+# Основные вкладки
+tab_work, tab_theory = st.tabs(["📊 Analytics Tool", "📘 Knowledge Base"])
 
-with col_data:
-    st.markdown("## 📊 Data Input")
-    tabs = st.tabs(["Manual Entry", "Excel Import"])
+with tab_work:
+    # Выбор отчета
+    report = st.selectbox("Select Report Type", ["Balance Sheet", "Income Statement", "Cash Flow"])
     
-    with tabs[0]:
-        report_type = st.selectbox("Statement", ["Balance Sheet", "Income Statement", "Cash Flow"])
-        st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("---")
+    
+    # --- ЛОГИКА ДЛЯ BALANCE SHEET ---
+    if report == "Balance Sheet":
+        col1, col2, col3 = st.columns(3)
+        with col1: a = st.number_input("Total Assets", value=10000.0, step=500.0, key="b1")
+        with col2: l = st.number_input("Total Liabilities", value=6000.0, step=500.0, key="b2")
+        with col3: e = st.number_input("Total Equity", value=4000.0, step=500.0, key="b3")
         
-        if report_type == "Balance Sheet":
-            a = st.number_input("Total Assets", key="ma", value=100000)
-            l = st.number_input("Total Liabilities", key="ml", value=60000)
-            e = st.number_input("Total Equity", key="me", value=40000)
+        if st.button("RUN AUDIT"):
+            if a == (l + e):
+                st.balloons()
+                st.success("Verified: Balance is perfectly aligned.")
+            else:
+                st.toast("Discrepancy found!", icon="⚠️")
+                st.error(f"Variance: {abs(a-(l+e))}")
             
-            # Логика графика Баланса
-            if a != 0:
-                with col_visual:
-                    st.markdown("## 📈 Balance Visualization")
-                    chart_data = pd.DataFrame({
-                        'Category': ['Assets', 'Liabilities + Equity'],
-                        'Value': [a, (l + e)]
-                    })
-                    fig = px.bar(chart_data, x='Category', y='Value', 
-                                 title="Assets vs. Funding Source",
-                                 color='Category', 
-                                 color_discrete_map={'Assets': '#d16a8c', 'Liabilities + Equity': '#64b5f6'})
-                    fig.update_layout(showlegend=False, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
-                    st.plotly_chart(fig, use_container_width=True)
+            # График снизу
+            df = pd.DataFrame({'Category': ['Assets', 'L + E'], 'Value': [a, (l+e)]})
+            fig = px.bar(df, x='Category', y='Value', color='Category', 
+                         color_discrete_map={'Assets': '#d16a8c', 'L + E': '#64b5f6'},
+                         height=350) # Компактная высота
+            st.plotly_chart(fig, use_container_width=True)
 
-            if st.button("RUN AUDIT", key="ba"):
-                if a == (l + e):
-                    st.balloons()
-                    st.success(f"Verified: Balance perfectly matches (A={a}). 👍")
-                else: 
-                    st.toast("Discrepancy detected!", icon="⚠️")
-                    st.error(f"Error: Assets do not match sources. Variance: {abs(a-(l+e))}")
+    # --- ЛОГИКА ДЛЯ INCOME STATEMENT ---
+    elif report == "Income Statement":
+        col1, col2, col3 = st.columns(3)
+        with col1: rev = st.number_input("Revenue", value=10000.0, step=500.0, key="i1")
+        with col2: exp = st.number_input("Expenses", value=7000.0, step=500.0, key="i2")
+        with col3: ni = st.number_input("Reported Net Income", value=3000.0, step=500.0, key="i3")
+        
+        if st.button("VALIDATE PROFIT"):
+            calc_ni = rev - exp
+            if ni == calc_ni:
+                st.balloons()
+                st.success(f"Verified: Net Income confirmed at {ni}")
+            else:
+                st.toast("Calculation error!", icon="❌")
+                st.error(f"Variance: {abs(ni-calc_ni)}")
+            
+            # График снизу
+            df = pd.DataFrame({'Component': ['Revenue', 'Expenses', 'Net Income'], 
+                               'Amount': [rev, exp, ni]})
+            fig = px.bar(df, x='Component', y='Amount', color='Component',
+                         color_discrete_sequence=['#ffb3c6', '#fb6f92', '#ff85a2'],
+                         height=350)
+            st.plotly_chart(fig, use_container_width=True)
 
-        # (Аналогичную логику с графиками можно добавить для Income и Cash Flow)
+    # --- ЛОГИКА ДЛЯ CASH FLOW ---
+    elif report == "Cash Flow":
+        c1, c2 = st.columns(2)
+        with c1: start = st.number_input("Opening Cash", value=5000.0, key="c1")
+        with c2: end = st.number_input("Closing Cash", value=8000.0, key="c2")
+        
+        o, i, f = st.columns(3)
+        with o: op = st.number_input("Operating", value=4000.0, key="c3")
+        with i: inv = st.number_input("Investing", value=-2000.0, key="c4")
+        with f: fin = st.number_input("Financing", value=1000.0, key="c5")
+        
+        if st.button("VERIFY CASH"):
+            calc_end = start + op + inv + fin
+            if end == calc_end:
+                st.balloons()
+                st.success("Verified: Cash movement is correct.")
+            else:
+                st.error(f"Variance: {abs(end-calc_end)}")
+            
+            # График снизу
+            df = pd.DataFrame({'Stage': ['Start', 'Change', 'End'], 
+                               'Cash': [start, (op+inv+fin), end]})
+            fig = px.line(df, x='Stage', y='Cash', markers=True, height=350)
+            fig.update_traces(line_color='#d16a8c')
+            st.plotly_chart(fig, use_container_width=True)
 
-    with tabs[1]:
-        st.markdown("### Import professional data")
-        uploaded_file = st.file_uploader("Drop .xlsx report", type="xlsx")
-        if uploaded_file and st.button("PROCESS FILE"):
-            st.balloons()
-            st.success("File analyzed. Data looks correct!")
+# --- БЛОК ТЕОРИИ (КАРТОЧКИ) ---
+with tab_theory:
+    st.markdown("<br>", unsafe_allow_html=True)
+    c_t1, c_t2, c_t3 = st.columns(3)
+    
+    with c_t1:
+        with st.expander("⚖️ Balance"):
+            st.info("Assets = Liabilities + Equity. Shows what the company owns and owes.")
+    with c_t2:
+        with st.expander("📈 Income"):
+            st.info("Revenue - Expenses = Net Income. Shows the profit over a period.")
+    with c_t3:
+        with st.expander("💸 Cash Flow"):
+            st.info("Tracks the actual movement of cash in and out of the business.")
 
-# --- СЕКЦИЯ: FINANCIAL KNOWLEDGE BASE (КАРТИНКИ И КАРТОЧКИ) ---
-st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: center;'>📘 Financial Library</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #a19194;'>Interactive guide to corporate reporting</p>", unsafe_allow_html=True)
-
-col_lib1, col_lib2, col_lib3 = st.columns(3)
-
-with col_lib1:
-    st.markdown("""
-        <div class="theory-card">
-            <div class="card-icon">⚖️</div>
-            <div class="card-title">Balance Sheet</div>
-            <p style='font-size: 0.9em; color: #635155;'>
-            "The Snapshot". Shows what a company <b>owns</b> and how it's <b>funded</b> at a specific point in time. 
-            Key formula: Assets = L + E.
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
-
-with col_lib2:
-    st.markdown("""
-        <div class="theory-card">
-            <div class="card-icon">📈</div>
-            <div class="card-title">Income Statement</div>
-            <p style='font-size: 0.9em; color: #635155;'>
-            "The Video". Measures performance <b>over time</b>. It shows how much profit (Net Income) remains after all expenses.
-            Formula: Revenue - Exp = NI.
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
-
-with col_lib3:
-    st.markdown("""
-        <div class="theory-card">
-            <div class="card-icon">💸</div>
-            <div class="card-title">Cash Flow</div>
-            <p style='font-size: 0.9em; color: #635155;'>
-            "The Pipeline". Tracks where actual <b>cash</b> came from and where it went. Profit does not equal cash in hand!
-            It has 3 categories.
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
-
-# Подвал
-st.markdown("<br><br><p style='text-align: center; font-size: 0.75em; color: #a19194;'>Powered by Corporate Audit Terminal | v7.0</p>", unsafe_allow_html=True)
+st.markdown("<br><p style='text-align: center; font-size: 0.8em; color: #aaa;'>Luxe Financial Terminal v8.0</p>", unsafe_allow_html=True)
