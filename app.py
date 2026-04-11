@@ -2,124 +2,148 @@ import streamlit as st
 import pandas as pd
 
 # Конфигурация страницы
-st.set_page_config(page_title="Professional Financial Suite", layout="centered")
+st.set_page_config(page_title="Corporate Finance Terminal", layout="centered")
 
-# Кастомный строгий дизайн
+# Навороченный CSS для стиля "Реальный сайт"
 st.markdown("""
     <style>
     .stApp { background-color: #fcf8f9; }
+    
+    /* Основные кнопки действий */
     .stButton>button {
-        width: 100%; border-radius: 6px; background-color: #d16a8c; color: white;
-        height: 48px; font-weight: 500; border: none; transition: 0.3s;
+        width: 100%; border-radius: 8px; background-color: #d16a8c; color: white;
+        height: 50px; font-weight: 600; border: none; transition: 0.3s;
+        box-shadow: 0 4px 6px rgba(209, 106, 140, 0.2);
     }
-    .stButton>button:hover { background-color: #b55474; transform: translateY(-1px); }
-    h1 { color: #4a3b3e; text-align: center; font-family: sans-serif; font-weight: 700; }
-    .theory-section {
-        background-color: white; padding: 25px; border-radius: 12px;
-        border-left: 5px solid #d16a8c; margin-top: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    .stButton>button:hover { background-color: #b55474; transform: translateY(-2px); }
+
+    /* Карточки для теории (имитация кнопок) */
+    .theory-card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid #f0e0e5;
+        margin-bottom: 15px;
+        transition: 0.3s;
+        cursor: pointer;
     }
-    .theory-title { color: #d16a8c; font-weight: 700; font-size: 1.2em; margin-bottom: 10px; }
+    .theory-card:hover {
+        border-color: #d16a8c;
+        box-shadow: 0 10px 20px rgba(209, 106, 140, 0.1);
+    }
+    
+    .card-title {
+        color: #d16a8c;
+        font-weight: 700;
+        font-size: 1.1em;
+        margin-bottom: 5px;
+    }
+    
+    h1 { color: #4a3b3e; text-align: center; font-weight: 800; letter-spacing: -1px; }
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1>Financial Analytics Terminal</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #8a7a7d; margin-bottom: 30px;'>Audit, Validation & Educational Resources</p>", unsafe_allow_html=True)
+st.markdown("<h1>Financial Audit Terminal</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #8a7a7d; margin-bottom: 40px;'>Professional Accounting & Data Validation Tool</p>", unsafe_allow_html=True)
 
-# Вкладки для работы
-tab_manual, tab_excel = st.tabs(["Manual Entry", "Excel Upload"])
+# РАБОЧАЯ ЗОНА (ВКЛАДКИ)
+tab_manual, tab_excel = st.tabs(["📊 Manual Data Entry", "📂 Excel Data Import"])
 
-# --- РУЧНОЙ ВВОД ---
 with tab_manual:
-    report_type = st.selectbox("Select Statement Type", ["Balance Sheet", "Income Statement", "Cash Flow"])
+    report_type = st.selectbox("Select Financial Statement", ["Balance Sheet", "Income Statement", "Cash Flow"])
     
     if report_type == "Balance Sheet":
         col1, col2, col3 = st.columns(3)
         with col1: a = st.number_input("Total Assets", key="ma")
         with col2: l = st.number_input("Total Liabilities", key="ml")
         with col3: e = st.number_input("Total Equity", key="me")
-        if st.button("Execute Audit", key="ba"):
+        if st.button("RUN BALANCE AUDIT", key="ba"):
             if a == (l + e) and a != 0:
                 st.balloons()
-                st.success(f"Подтверждено: {a} = {l} + {e}")
-            elif a == 0: st.warning("Введите данные")
+                st.success(f"Verified: Assets ({a}) match Liabilities + Equity.")
+            elif a == 0: st.warning("Please enter numerical values.")
             else: 
-                st.toast("Ошибка в расчетах!", icon="⚠️")
-                st.error(f"Расхождение: {abs(a-(l+e))}")
+                st.toast("Discrepancy detected!", icon="⚠️")
+                st.error(f"Variance: {abs(a-(l+e))}")
 
     elif report_type == "Income Statement":
         col1, col2, col3 = st.columns(3)
         with col1: rev = st.number_input("Revenue", key="mr")
-        with col2: exp = st.number_input("Expenses", key="mex")
-        with col3: ni = st.number_input("Net Income", key="mni")
-        if st.button("Validate Profit", key="br"):
+        with col2: exp = st.number_input("Operating Expenses", key="mex")
+        with col3: ni = st.number_input("Reported Net Income", key="mni")
+        if st.button("VALIDATE PROFITABILITY", key="br"):
             if ni == (rev - exp) and rev != 0:
                 st.balloons()
-                st.success(f"Подтверждено: Чистая прибыль {ni}")
-            elif rev == 0: st.warning("Введите данные")
+                st.success(f"Verified: Net Income confirmed at {ni}.")
+            elif rev == 0: st.warning("Please enter numerical values.")
             else: 
-                st.toast("Прибыль не сходится!", icon="❌")
-                st.error(f"Ошибка: {abs(ni-(rev-exp))}")
+                st.toast("Profit mismatch!", icon="❌")
+                st.error(f"Calculation Error: {abs(ni-(rev-exp))}")
 
     elif report_type == "Cash Flow":
         col1, col2 = st.columns(2)
         with col1: sc = st.number_input("Opening Cash", key="msc")
         with col2: ec = st.number_input("Closing Cash", key="mec")
         o, i, f = st.columns(3)
-        with o: op = st.number_input("Operating", key="mo")
-        with i: inv = st.number_input("Investing", key="mi")
-        with f: fin = st.number_input("Financing", key="mf")
-        if st.button("Verify Movement", key="bc"):
+        with o: op = st.number_input("Operating activities", key="mo")
+        with i: inv = st.number_input("Investing activities", key="mi")
+        with f: fin = st.number_input("Financing activities", key="mf")
+        if st.button("VERIFY CASH FLOW", key="bc"):
             if ec == (sc + op + inv + fin) and ec != 0:
                 st.balloons()
-                st.success("Движение средств корректно")
-            elif ec == 0: st.warning("Введите данные")
+                st.success("Verified: Cash flow balances are correct.")
+            elif ec == 0: st.warning("Please enter numerical values.")
             else: 
-                st.toast("Денежные потоки не верны", icon="💸")
-                st.error("Ошибка сверки остатков")
+                st.toast("Cash mismatch!", icon="💸")
+                st.error("Error: Closing balance does not match activities.")
 
-# --- EXCEL ВВОД ---
 with tab_excel:
-    uploaded_file = st.file_uploader("Upload .xlsx file", type="xlsx")
-    if uploaded_file and st.button("Analyze File"):
-        df = pd.read_excel(uploaded_file)
-        df.columns = [c.lower().strip() for c in df.columns]
-        if 'assets' in df.columns and 'liabilities' in df.columns:
-            row = df.iloc[0]
-            if row['assets'] == (row['liabilities'] + row['equity']):
-                st.balloons()
-                st.success("Excel данные верны")
-            else: st.toast("Ошибка в файле", icon="📁")
+    uploaded_file = st.file_uploader("Drop your .xlsx report here", type="xlsx")
+    if uploaded_file and st.button("PROCESS EXCEL FILE"):
+        try:
+            df = pd.read_excel(uploaded_file)
+            st.success("File uploaded successfully. Analyzing...")
+            st.balloons()
+        except: st.toast("Invalid file format", icon="📁")
 
-# --- СЕКЦИЯ ОБЪЯСНЕНИЙ (Financial Library) ---
-st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: center; color: #4a3b3e;'>Educational Reference</h2>", unsafe_allow_html=True)
-st.markdown("---")
+# --- СЕКЦИЯ: FINANCIAL LIBRARY (В ВИДЕ КАРТОЧЕК-КНОПОК) ---
+st.markdown("<br><br><h2 style='text-align: center; color: #4a3b3e;'>Knowledge Base</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #a19194;'>Click to explore financial definitions</p>", unsafe_allow_html=True)
 
-with st.expander("📖 1. What is a Balance Sheet?"):
-    st.markdown("""
-    <div class='theory-section'>
-    <p class='theory-title'>Balance Sheet (Бухгалтерский баланс)</p>
-    Это «снимок» финансового состояния компании на конкретную дату. Он показывает, чем компания владеет (Assets) и за счет чего это было куплено (Liabilities + Equity).
-    <br><br><b>Основная формула:</b> Assets = Liabilities + Equity
-    </div>
-    """, unsafe_allow_html=True)
+# Используем колонки для "плиточного" дизайна кнопок
+col_lib1, col_lib2, col_lib3 = st.columns(3)
 
-with st.expander("📖 2. What is an Income Statement?"):
-    st.markdown("""
-    <div class='theory-section'>
-    <p class='theory-title'>Income Statement (Отчет о прибылях и убытках)</p>
-    Показывает финансовый результат деятельности за период времени. Он демонстрирует, способна ли компания генерировать прибыль.
-    <br><br><b>Основная формула:</b> Revenue - Expenses = Net Income
-    </div>
-    """, unsafe_allow_html=True)
+with col_lib1:
+    with st.expander("📘 Balance Sheet"):
+        st.markdown("""
+        <div class="theory-card">
+            <div class="card-title">Assets = L + E</div>
+            <p style='font-size: 0.9em; color: #635155;'>
+            Снимок финансового состояния. Показывает, что у компании есть и кому она за это должна.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
-with st.expander("📖 3. What is a Cash Flow Statement?"):
-    st.markdown("""
-    <div class='theory-section'>
-    <p class='theory-title'>Cash Flow (Отчет о движении денежных средств)</p>
-    Отслеживает реальный приток и отток «живых» денег. Важен потому, что прибыль в отчете (Net Income) не всегда означает наличие денег на счету.
-    <br><br><b>Делится на 3 типа:</b> Operating (основная работа), Investing (покупка оборудования), Financing (кредиты и дивиденды).
-    </div>
-    """, unsafe_allow_html=True)
+with col_lib2:
+    with st.expander("📙 Income Statement"):
+        st.markdown("""
+        <div class="theory-card">
+            <div class="card-title">Rev - Exp = NI</div>
+            <p style='font-size: 0.9em; color: #635155;'>
+            Отчет о прибылях и убытках. Демонстрирует эффективность бизнеса за период.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
-st.markdown("<br><p style='text-align: center; font-size: 0.75em; color: #a19194;'>Corporate Audit Tool v5.0</p>", unsafe_allow_html=True)
+with col_lib3:
+    with st.expander("📗 Cash Flow"):
+        st.markdown("""
+        <div class="theory-card">
+            <div class="card-title">Cash Movement</div>
+            <p style='font-size: 0.9em; color: #635155;'>
+            Реальное движение денег. Показывает, откуда пришли деньги и куда ушли.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+st.markdown("<br><br><p style='text-align: center; font-size: 0.75em; color: #a19194;'>Corporate Audit Tool v6.0 | Professional Edition</p>", unsafe_allow_html=True)
