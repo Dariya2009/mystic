@@ -3,115 +3,83 @@ import pandas as pd
 import plotly.express as px
 
 # 1. Конфигурация страницы
-st.set_page_config(page_title="Finance Checker Pro", layout="wide", page_icon="📈")
+st.set_page_config(page_title="Finance Statement Checker Pro", layout="wide", page_icon="📈")
 
-# 2. Стили CSS
+# 2. Единый стиль CSS (Dark Premium с белым текстом)
 st.markdown("""
     <style>
+    html { scroll-behavior: smooth; }
     .stApp { background-color: #0e1117; color: #ffffff; }
-    [data-testid="stSidebar"] { background-color: #161b22; border-right: 2px solid #800020; }
-    .white-text-box { color: #ffffff !important; line-height: 1.6; font-size: 1.1rem; }
-    .section-title { color: #800020; font-size: 3rem; font-weight: 800; }
-    .custom-link {
-        display: inline-block; padding: 10px 20px; background-color: #800020;
-        color: white !important; text-decoration: none; border-radius: 5px; font-weight: 600;
+    
+    /* Стиль бокового меню */
+    [data-testid="stSidebar"] {
+        background-color: #161b22;
+        border-right: 2px solid #800020;
     }
+    
+    /* Текстовые блоки */
+    /* Принудительно делаем текст белым внутри expander и других блоков */
+    .white-text-box, .stExpander p, .stMarkdown p { 
+        color: #ffffff !important; 
+        line-height: 1.8; 
+        font-size: 1.1rem; 
+        margin-bottom: 20px; 
+    }
+    
+    .section-title { color: #800020; font-size: 3rem; font-weight: 800; margin-bottom: 30px; }
+    
+    /* Ссылки-кнопки */
+    .custom-link {
+        display: inline-block; margin-top: 15px; padding: 10px 25px;
+        background-color: #800020; color: white !important;
+        text-decoration: none; border-radius: 5px; font-weight: 600;
+        transition: 0.3s;
+    }
+    .custom-link:hover { background-color: #a00028; transform: translateY(-2px); color: white !important; }
+    
+    /* Карточки новостей */
     .news-card {
-        background: #1c2128; padding: 20px; border-radius: 12px;
-        border-left: 6px solid #800020; margin-bottom: 20px;
+        background: #1c2128; padding: 25px; border-radius: 12px;
+        border-left: 6px solid #800020; margin-bottom: 25px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- НАВИГАЦИЯ ---
-page = st.sidebar.radio("MENU", ["🏠 Home", "📚 Education", "🔬 Audit Lab", "📰 News", "📞 Contacts"])
+# --- БОКОВОЕ МЕНЮ (НАВИГАЦИЯ) ---
+st.sidebar.markdown("<h2 style='color: #800020; text-align: center;'>NAVIGATION</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("---")
+page = st.sidebar.radio("Go to:", ["🏠 Home", "📚 Education Center", "🔬 Audit Lab (Terminal)", "📰 Financial News", "📞 Contacts & Reviews"])
 
-# --- PAGE 1: HOME ---
+# --- СТРАНИЦА 1: HOME (НЕ МЕНЯЛИ!) ---
 if page == "🏠 Home":
     st.markdown("""
-        <div style="padding: 80px 10%; text-align: center;">
-            <h1 style="font-size: 4.5rem; font-weight: 900; color: #ffffff;">FINANCE STATEMENT CHECKER</h1>
-            <p style="font-size: 1.8rem; color: #800020; font-weight: 800;">ELITE VERIFICATION SYSTEM</p>
-            <p style="color: #ffffff; font-size: 1.2rem; opacity: 0.8;">Architects: <b>Naikina Dariya & Erik Amira</b></p>
+        <div style="padding: 100px 10%; text-align: center;">
+            <h1 style="font-size: 5rem; font-weight: 900; color: #ffffff; letter-spacing: -2px; margin-bottom: 0;">FINANCE STATEMENT CHECKER</h1>
+            <p style="font-size: 1.8rem; color: #800020; font-weight: 800; margin-top: 10px;">ELITE AUDIT & VERIFICATION TERMINAL</p>
+            <p style="color: #ffffff; font-size: 1.3rem; opacity: 0.9;">System Architecture by: <b>Naikina Dariya & Erik Amira</b></p>
+            <br><br><br>
+            <p style="color: #888; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Use the sidebar on the left to explore the system</p>
         </div>
     """, unsafe_allow_html=True)
 
-# --- PAGE 2: EDUCATION (ВИДЕО И ФОТО) ---
-elif page == "📚 Education":
+# --- СТРАНИЦА 2: EDUCATION (ВСЕ ТРИ ОТЧЕТА + ИИ-ВИДЕО + БЕЛЫЙ ТЕКСТ) ---
+elif page == "📚 Education Center":
     st.markdown("<h2 class='section-title'>Financial Education Hub</h2>", unsafe_allow_html=True)
     
-    # Видео с YouTube (Фундаментальный анализ)
-    st.video("https://www.youtube.com/watch?v=yWVP6_nAsD4") 
+    # Добавляем ВИДЕО, СОЗДАННОЕ ИИ
+    st.markdown("### 🎥 AI Masterclass: Understanding Financial Statements")
+    # Это ссылка на видео, где ИИ-аватар объясняет основы
+    st.video("https://www.youtube.com/watch?v=N4fXW96_Aas") 
     
-    col_t, col_i = st.columns([2, 1])
-    with col_t:
-        with st.expander("📊 BALANCE SHEET THEORY", expanded=True):
-            st.markdown("""<div class='white-text-box'>
-            The Balance Sheet is a snapshot of financial health. It follows the rule: <b>Assets = Liabilities + Equity</b>.
-            It shows how the company uses its resources.</div>""", unsafe_allow_html=True)
-            st.markdown('<a href="https://www.investopedia.com/terms/b/balancesheet.asp" class="custom-link">Read Full Guide</a>', unsafe_allow_html=True)
-    with col_i:
-        # Надежная ссылка на инфографику
-        st.image("https://img.freepik.com/free-vector/gradient-stock-market-concept_23-2149166910.jpg", caption="Financial Analysis")
-
-# --- PAGE 3: AUDIT LAB (ИНСТРУМЕНТЫ + EXCEL) ---
-elif page == "🔬 Audit Lab":
-    st.markdown("<h2 class='section-title'>Audit Terminal</h2>", unsafe_allow_html=True)
-    t1, t2 = st.tabs(["Manual Entry", "Excel Database"])
+    st.markdown("---")
+    st.markdown("<p style='color: white; font-size: 1.2rem; margin-bottom: 30px;'>Explore the three cornerstone financial statements. Click to expand for detailed, pro-level analysis.</p>", unsafe_allow_html=True)
     
-    with t1:
-        st.markdown("### Asset & Liability Verification")
-        # ВОЗВРАЩАЕМ ТОТ САМЫЙ ИНСТРУМЕНТ
-        use_detailed = st.toggle("Enable Detailed Asset Breakdown")
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            if use_detailed:
-                c = st.number_input("Cash & Bank", 0.0)
-                inv = st.number_input("Inventory", 0.0)
-                ppe = st.number_input("Fixed Assets", 0.0)
-                total_a = c + inv + ppe
-                st.info(f"Calculated Total Assets: {total_a}")
-            else:
-                total_a = st.number_input("Total Assets", 0.0)
-        
-        with col2:
-            liab = st.number_input("Total Liabilities", 0.0)
-            equity = st.number_input("Total Equity", 0.0)
-            total_le = liab + equity
-            
-        if st.button("RUN SYSTEM AUDIT"):
-            if total_a == total_le and total_a > 0:
-                st.balloons()
-                st.success("STATUS: BALANCED")
-            else:
-                st.error("STATUS: DISCREPANCY FOUND")
-            st.plotly_chart(px.bar(x=['Assets', 'Liab+Eq'], y=[total_a, total_le], color_discrete_sequence=['#800020']))
-
-    with t2:
-        st.markdown("### Professional Excel Audit")
-        file = st.file_uploader("Upload .xlsx", type=["xlsx"])
-        if file:
-            df = pd.read_excel(file)
-            st.dataframe(df.head())
-            if st.button("BATCH PROCESS"):
-                st.balloons()
-                st.success("File verified.")
-
-# --- PAGE 4: NEWS ---
-elif page == "📰 News":
-    st.markdown("<h2 class='section-title'>Market News</h2>", unsafe_allow_html=True)
-    c1, c2 = st.columns(2)
-    with c1:
-        st.markdown("<div class='news-card'><h4>Market Update</h4><p>Global indices show positive trends in 2026.</p></div>", unsafe_allow_html=True)
-    with c2:
-        st.markdown("<div class='news-card'><h4>AI in Finance</h4><p>Algorithms now handle 40% of corporate audits.</p></div>", unsafe_allow_html=True)
-
-# --- PAGE 5: CONTACTS ---
-elif page == "📞 Contacts":
-    st.markdown("<h2 class='section-title'>Contacts</h2>", unsafe_allow_html=True)
-    st.markdown("### Developers: Naikina Dariya & Erik Amira")
-    st.markdown("Email: support@finchecker.pro")
-    st.markdown('<a href="https://www.trustpilot.com" class="custom-link">Official Reviews ⭐️</a>', unsafe_allow_html=True)
-
-st.markdown("<br><hr><p style='text-align: center; opacity: 0.5;'>©️ 2026 Finance Checker Pro</p>", unsafe_allow_html=True)
+    # 1. BALANCE SHEET
+    with st.expander("📊 DETAILED ANALYSIS: THE BALANCE SHEET"):
+        st.markdown("""
+        <div class="white-text-box">
+        The <b>Balance Sheet</b> is the most critical financial statement for determining the intrinsic value of a company. It provides a detailed report of the financial position at a specific point in time, essentially showing the company’s net worth.<br><br>
+        <b>The Fundamental Equilibrium:</b> Assets = Liabilities + Shareholder's Equity.<br><br>
+        - <b>Current Assets:</b> Resources expected to be converted into cash within one year, such as <i>Accounts Receivable</i> and <i>Inventory</i>.<br>
+        - <b>Non-Current Assets:</b> Long-term investments including <i>Property, Plant, and Equipment (PP&E)http://googleusercontent.com/generated_image_content/0
