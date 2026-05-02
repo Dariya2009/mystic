@@ -46,7 +46,7 @@ if page == "🏠 Home":
 elif page == "📚 Education Center":
     st.markdown("<h2 class='section-title'>Financial Education</h2>", unsafe_allow_html=True)
     st.markdown("### 🎥 AI Masterclass: How to Read Statements")
-    st.video("https://www.youtube.com/watch?v=N4fXW96_Aas") 
+    st.video("AI in Finance_ Revolutionizing Report Verification_720p_caption.mp4") 
     st.markdown("---")
 
     with st.expander("📊 BALANCE SHEET DETAILS"):
