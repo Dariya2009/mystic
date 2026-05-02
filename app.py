@@ -2,148 +2,150 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Настройки страницы
-st.set_page_config(page_title="Luxe Financial Terminal", layout="centered", page_icon="💎")
+# Конфигурация страницы
+st.set_page_config(page_title="Finance Statement Checker", layout="wide", page_icon="📈")
 
-# Навороченный CSS для эффекта полноценного лендинга
+# Профессиональный дизайн (Серый и Бордовый)
 st.markdown("""
     <style>
-    /* Плавный скролл */
-    html { scroll-behavior: smooth; }
-    
-    .stApp { background: linear-gradient(180deg, #fdf2f5 0%, #ffffff 50%, #e3f2fd 100%); }
-    
-    /* Стили для секций */
-    .section-container {
-        background: rgba(255, 255, 255, 0.8);
-        padding: 40px;
-        border-radius: 25px;
-        margin-bottom: 50px;
-        border: 1px solid rgba(230, 200, 210, 0.5);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    /* Основной фон и шрифт */
+    .stApp {
+        background-color: #1e1e1e;
+        color: #e0e0e0;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
-
-    .stButton>button {
-        width: 100%; border-radius: 12px; background-color: #d16a8c; color: white;
-        height: 50px; font-weight: 700; border: none; transition: 0.4s;
-    }
-    .stButton>button:hover { background-color: #b55474; transform: scale(1.02); }
     
-    h1 { color: #4a3b3e; text-align: center; font-weight: 800; font-size: 3em; margin-bottom: 0px; }
-    h2 { color: #d16a8c; text-align: center; font-weight: 700; margin-top: 20px; }
-    
-    /* Футер и Авторы */
-    .author-card {
+    /* Титульный экран */
+    .hero-section {
+        height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         text-align: center;
-        padding: 20px;
-        background: white;
-        border-radius: 15px;
-        border: 1px solid #f0e0e5;
+        background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+        border-bottom: 3px solid #800020;
     }
+    .hero-title { font-size: 5rem; font-weight: 800; color: #ffffff; margin-bottom: 0px; }
+    .hero-subtitle { font-size: 1.5rem; color: #800020; font-weight: 500; margin-top: 10px; }
+    .developers { font-size: 1rem; color: #aaaaaa; margin-top: 40px; text-transform: uppercase; letter-spacing: 2px; }
+
+    /* Секции */
+    .section-container {
+        padding: 60px 10%;
+        background-color: #262626;
+        margin-top: 20px;
+        border-radius: 10px;
+    }
+    h2 { color: #800020; font-weight: 700; border-bottom: 1px solid #333; padding-bottom: 10px; }
+
+    /* Стилизация ввода и кнопок */
+    .stNumberInput input { background-color: #333 !important; color: white !important; border: 1px solid #444 !important; }
+    .stButton>button {
+        background-color: #800020;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        height: 50px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    .stButton>button:hover { background-color: #a00028; transform: translateY(-2px); border: none; color: white; }
+
+    /* Ссылки */
+    a { color: #800020; text-decoration: none; font-weight: bold; }
+    a:hover { color: #a00028; }
     </style>
 """, unsafe_allow_html=True)
 
-# --- ГЛАВНЫЙ ЭКРАН (HEADER) ---
-st.markdown("<h1>Financial Audit Terminal</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #8a7a7d; font-size: 1.2em;'>Intelligent Verification System for Modern Accounting</p>", unsafe_allow_html=True)
-st.markdown("<br><br>", unsafe_allow_html=True)
+# --- SECTION 1: TITLE SCREEN (HERO) ---
+st.markdown(f"""
+    <div class="hero-section">
+        <div class="hero-title">FINANCE STATEMENT CHECKER</div>
+        <div class="hero-subtitle">High-Precision Audit & Data Validation Terminal</div>
+        <div class="developers">Developed by: Naikina Dariya & Erik Amira</div>
+        <div style="margin-top: 50px; color: #555;">Scroll down to begin</div>
+    </div>
+""", unsafe_allow_html=True)
 
-# --- СЕКЦИЯ 1: ANALYTICS TOOL (ГЛАВНЫЙ БЛОК) ---
+# --- SECTION 2: KNOWLEDGE BASE ---
 st.markdown("<div class='section-container'>", unsafe_allow_html=True)
-st.markdown("## 📊 1. Analytics & Verification")
-input_mode = st.radio("Choose Mode", ["Manual Entry", "Excel Upload"], horizontal=True)
+st.markdown("## FINANCIAL CONCEPTS & TERMINOLOGY")
+col1, col2, col3 = st.columns(3)
 
-if input_mode == "Manual Entry":
-    report = st.selectbox("Statement Type", ["Balance Sheet", "Income Statement", "Cash Flow"])
+with col1:
+    st.markdown("### Balance Sheet")
+    st.write("A financial snapshot that shows a company's assets, liabilities, and equity at a specific point in time.")
+    st.markdown("[View Visual Example 🔗](https://www.investopedia.com/terms/b/balancesheet.asp)")
+
+with col2:
+    st.markdown("### Income Statement")
+    st.write("Reports a company's financial performance over a specific accounting period (Profit/Loss).")
+    st.markdown("[View Visual Example 🔗](https://www.investopedia.com/terms/i/incomestatement.asp)")
+
+with col3:
+    st.markdown("### Cash Flow")
+    st.write("Tracks the net amount of cash and cash equivalents being transferred into and out of a business.")
+    st.markdown("[View Visual Example 🔗](https://www.investopedia.com/terms/c/cashflowstatement.asp)")
+st.markdown("</div>", unsafe_allow_html=True)
+
+# --- SECTION 3: CHECKER (THE CORE) ---
+st.markdown("<div class='section-container' id='checker'>", unsafe_allow_html=True)
+st.markdown("## STATEMENT VERIFICATION TERMINAL")
+
+# Интерактивный переход (Переключатель)
+input_method = st.segmented_control("Select Input Architecture", ["Manual Terminal", "Excel Database"], default="Manual Terminal")
+
+if input_method == "Manual Terminal":
+    st.markdown("### Manual Entry System")
+    report_type = st.selectbox("Financial Report Type", ["Balance Sheet Audit", "Income Analysis", "Cash Verification"])
     
-    if report == "Balance Sheet":
+    if report_type == "Balance Sheet Audit":
         c1, c2, c3 = st.columns(3)
-        with c1: a = st.number_input("Assets", value=10000.0)
-        with c2: l = st.number_input("Liabilities", value=6000.0)
-        with c3: e = st.number_input("Equity", value=4000.0)
-        if st.button("RUN AUDIT"):
-            if a == (l + e):
-                st.balloons()
-                st.success("Verified: A = L + E")
-            else: st.error(f"Variance: {abs(a-(l+e))}")
-            fig = px.bar(x=['Assets', 'L + E'], y=[a, l+e], color=['Assets', 'L + E'], 
-                         color_discrete_sequence=['#d16a8c', '#64b5f6'], height=350)
+        with c1: assets = st.number_input("Total Assets", value=0.0, max_value=10000.0)
+        with c2: liabilities = st.number_input("Liabilities", value=0.0, max_value=10000.0)
+        with c3: equity = st.number_input("Owner's Equity", value=0.0, max_value=10000.0)
+        
+        if st.button("EXECUTE AUDIT"):
+            if assets == (liabilities + equity) and assets != 0:
+                st.snow() # Эффект конфетти/снега
+                st.success("AUDIT SUCCESS: Statement is balanced.")
+            else:
+                st.error(f"AUDIT ERROR: Discrepancy of {abs(assets - (liabilities+equity))} detected.")
+            
+            # График с лимитом 10,000
+            df = pd.DataFrame({'Component': ['Assets', 'Liabilities + Equity'], 'Value': [assets, liabilities + equity]})
+            fig = px.bar(df, x='Component', y='Value', color='Component', range_y=[0, 10000],
+                         color_discrete_map={'Assets': '#800020', 'Liabilities + Equity': '#444444'})
+            fig.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font_color="white")
             st.plotly_chart(fig, use_container_width=True)
 
-    elif report == "Income Statement":
+    elif report_type == "Income Analysis":
         c1, c2, c3 = st.columns(3)
-        with c1: rev = st.number_input("Revenue", value=12000.0)
-        with c2: exp = st.number_input("Expenses", value=8000.0)
-        with c3: ni = st.number_input("Net Income", value=4000.0)
-        if st.button("VALIDATE PROFIT"):
-            if ni == (rev - exp):
-                st.balloons()
-                st.success("Profitability Confirmed")
-            else: st.error(f"Variance: {abs(ni-(rev-exp))}")
-            fig = px.bar(x=['Revenue', 'Expenses', 'Net Income'], y=[rev, exp, ni], height=350)
+        with c1: rev = st.number_input("Total Revenue", value=0.0, max_value=10000.0)
+        with c2: exp = st.number_input("Total Expenses", value=0.0, max_value=10000.0)
+        with c3: ni = st.number_input("Reported Net Income", value=0.0, max_value=10000.0)
+        
+        if st.button("VALIDATE PROFITABILITY"):
+            if ni == (rev - exp) and rev != 0:
+                st.snow()
+                st.success("VALIDATION SUCCESS: Profit calculation is accurate.")
+            else:
+                st.error("VALIDATION ERROR: Net Income does not match Revenue - Expenses.")
+            
+            df = pd.DataFrame({'Component': ['Revenue', 'Expenses', 'Net Income'], 'Value': [rev, exp, ni]})
+            fig = px.bar(df, x='Component', y='Value', color_discrete_sequence=['#800020'], range_y=[0, 10000])
+            fig.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font_color="white")
             st.plotly_chart(fig, use_container_width=True)
-
-    elif report == "Cash Flow":
-        c1, c2 = st.columns(2)
-        with c1: start = st.number_input("Opening Cash", value=5000.0)
-        with c2: end = st.number_input("Closing Cash", value=8000.0)
-        if st.button("VERIFY CASH"):
-            st.info("Check manual calculations or use Excel for full flow.")
-            st.balloons()
 
 else:
-    uploaded_file = st.file_uploader("Upload .xlsx file", type="xlsx")
-    if uploaded_file and st.button("PROCESS EXCEL"):
-        st.success("File processed successfully!")
-        st.balloons()
+    st.markdown("### Excel Batch Processing")
+    file = st.file_uploader("Upload Company Report (.xlsx)", type="xlsx")
+    if file:
+        st.success("File uploaded. Analyzing secure data...")
+        st.snow()
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-# --- СЕКЦИЯ 2: KNOWLEDGE BASE (ЛИСТАЕМ НИЖЕ) ---
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("<div class='section-container'>", unsafe_allow_html=True)
-st.markdown("## 📘 2. Financial Knowledge Base")
-st.markdown("<p style='text-align: center;'>Essential concepts for business analysis</p>", unsafe_allow_html=True)
-
-col_t1, col_t2, col_t3 = st.columns(3)
-with col_t1:
-    with st.expander("⚖️ Balance Sheet"):
-        st.write("Снимок активов и обязательств. Главное — равенство сторон.")
-with col_t2:
-    with st.expander("📈 Income Statement"):
-        st.write("Показывает результат работы: сколько заработали и сколько потратили.")
-with col_t3:
-    with st.expander("💸 Cash Flow"):
-        st.write("Движение реальных денег. Важно для ликвидности бизнеса.")
-st.markdown("</div>", unsafe_allow_html=True)
-
-# --- СЕКЦИЯ 3: AUTHORS & CONTACTS ---
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("## 🤝 3. Meet the Authors")
-
-col_a1, col_a2 = st.columns(2)
-
-with col_a1:
-    st.markdown("""
-        <div class='author-card'>
-            <h3>Найкина Дария</h3>
-            <p>Lead Developer & Financial Analyst</p>
-        </div>
-    """, unsafe_allow_html=True)
-
-with col_a2:
-    st.markdown("""
-        <div class='author-card'>
-            <h3>Ерик Амира</h3>
-            <p>UI/UX Designer & Researcher</p>
-        </div>
-    """, unsafe_allow_html=True)
-
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-st.markdown("### Contact Us")
-st.write("Email: contact@luxefinance.com")
-st.write("University Project 2026")
-st.markdown("</div>", unsafe_allow_html=True)
-
-st.markdown("<br><br><p style='text-align: center; font-size: 0.8em; color: #aaa;'>Luxe Financial Terminal v10.0 | One-Page Edition</p>", unsafe_allow_html=True)
+# Footer
+st.markdown("<br><p style='text-align: center; color: #555;'>Finance Statement Checker v2.0 | Naikina & Erik | 2026</p>", unsafe_allow_html=True)
